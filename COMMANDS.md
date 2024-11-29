@@ -1,7 +1,8 @@
 
 ```bash
 source ~/miniconda3/bin/activate
-conda activate llama-stack
+conda create --prefix ./envs python=3.10
+conda activate ./envs
 
 pip install -r requirements.txt
 

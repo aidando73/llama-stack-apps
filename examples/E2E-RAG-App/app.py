@@ -22,7 +22,7 @@ from llama_stack_client.types.memory_insert_params import Document
 load_dotenv()
 
 HOST = os.getenv("HOST", "localhost")
-PORT = int(os.getenv("PORT", "5000"))
+PORT = int(os.getenv("PORT", "5001"))
 GRADIO_SERVER_PORT = int(os.getenv("GRADIO_SERVER_PORT", "7861"))
 USE_GPU = os.getenv("USE_GPU", False)
 MODEL_NAME = os.getenv("MODEL_NAME", "meta-llama/Llama-3.2-3B-Instruct")
