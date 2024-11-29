@@ -18,7 +18,7 @@ python -m examples.agents.rag_with_memory_bank localhost 5001
 
 cd examples/E2E-RAG-App/
 pip install -r requirements.txt
-pip install chromadb
+pip install gradio chromadb
 
 python app.py localhost ./example_data/
 ```
