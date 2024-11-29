@@ -1,8 +1,12 @@
 
 ```bash
 source ~/miniconda3/bin/activate
-conda create --prefix ./envs python=3.10
-conda activate ./envs
+conda create --prefix ./env python=3.10
+
+source ~/miniconda3/bin/activate
+conda activate ./env
+
+python print.py > error.txt
 
 pip install -r requirements.txt
 

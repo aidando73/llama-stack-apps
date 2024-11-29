@@ -25,7 +25,7 @@ HOST = os.getenv("HOST", "localhost")
 PORT = int(os.getenv("PORT", "5001"))
 GRADIO_SERVER_PORT = int(os.getenv("GRADIO_SERVER_PORT", "7861"))
 USE_GPU = os.getenv("USE_GPU", False)
-MODEL_NAME = os.getenv("MODEL_NAME", "meta-llama/Llama-3.2-3B-Instruct")
+MODEL_NAME = os.getenv("MODEL_NAME", "meta-llama/Llama-3.2-11B-Vision-Instruct")
 # if use_gpu, then the documents will be processed to output folder
 DOCS_DIR = "./example_data"
 
@@ -137,8 +137,13 @@ class LlamaChatInterface:
         if self.agent is None:
             asyncio.run(self.initialize_system())
 
+        user_prompts = [
+            "What is the name of the llama model released on October 24, 2024?",
+            "What about Llama 3.1 model, what is the release date for it?",
+        ]
+        messages = [{"role": "user", "content": message} for message in user_prompts]
         response = self.agent.create_turn(
-            messages=[{"role": "user", "content": message}],
+            messages=messages,
             session_id=self.session_id,
         )
 
