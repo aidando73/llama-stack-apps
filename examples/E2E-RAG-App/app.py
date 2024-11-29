@@ -27,8 +27,7 @@ GRADIO_SERVER_PORT = int(os.getenv("GRADIO_SERVER_PORT", "7861"))
 USE_GPU = os.getenv("USE_GPU", False)
 MODEL_NAME = os.getenv("MODEL_NAME", "meta-llama/Llama-3.2-3B-Instruct")
 # if use_gpu, then the documents will be processed to output folder
-DOCS_DIR =  "/root/rag_data/output" if USE_GPU else "/root/rag_data/"
-
+DOCS_DIR = "./example_data"
 
 class LlamaChatInterface:
     def __init__(self, host: str, port: int, docs_dir: str):
@@ -38,7 +37,7 @@ class LlamaChatInterface:
         self.client = LlamaStackClient(base_url=f"http://{host}:{port}")
         self.agent = None
         self.session_id = None
-        self.memory_bank_id = "test_bank_235"
+        self.memory_bank_id = "test_bank_2"
 
     async def initialize_system(self):
         """Initialize the entire system including memory bank and agent."""

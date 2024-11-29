@@ -20,5 +20,5 @@ cd examples/E2E-RAG-App/
 pip install -r requirements.txt
 pip install gradio chromadb
 
-python app.py localhost ./example_data/
+python app.py
 ```
