@@ -37,7 +37,7 @@ async def run_main(
 
     agent_config = AgentConfig(
         model="Llama3.1-8B-Instruct",
-        instructions="You are a helpful assistant",
+        instructions="You are a helpful assistant. If you don't know the answer, use the brave_search tool to search the web.",
         sampling_params={
             "strategy": "greedy",
             "temperature": 1.0,
