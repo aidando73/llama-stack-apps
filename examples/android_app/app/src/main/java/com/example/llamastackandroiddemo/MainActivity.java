@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements Runnable, Inferen
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    AppLogging.getInstance().log("onCreate called");
     setContentView(R.layout.activity_main);
 	  getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar));
 	  getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.nav_bar));
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements Runnable, Inferen
       }
       AppLogging.getInstance().log("test "+ updatedSettingsFields.getRemoteURL());
 
+      AppLogging.getInstance().log("onResume: " +  settingsFieldsJSON);
       boolean isUpdated = !mCurrentSettingsFields.equals(updatedSettingsFields);
       boolean isLoadModel = updatedSettingsFields.getIsLoadModel();
       setBackendMode(updatedSettingsFields.getBackendType());
