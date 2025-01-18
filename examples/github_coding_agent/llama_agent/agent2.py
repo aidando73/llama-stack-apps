@@ -133,6 +133,13 @@ class PickFileTool(ClientTool):
             )
         }
 
+    def run(
+        self, messages: List[Union[UserMessage, ToolResponseMessage]]
+    ) -> List[Union[UserMessage, ToolResponseMessage]]:
+        print("Pick file called")
+        return messages
+
+
 
 class ListFilesTool(ClientTool):
     def get_name(self) -> str:
@@ -150,7 +157,15 @@ class ListFilesTool(ClientTool):
                 required=True,
             )
         }
+    
+    def run_impl(self, path: str) -> str:
+        return f"Listed files in {path}"
 
+    def run(
+        self, messages: List[Union[UserMessage, ToolResponseMessage]]
+    ) -> List[Union[UserMessage, ToolResponseMessage]]:
+        print("List files called")
+        return messages
 
 class ViewFileTool(ClientTool):
     def get_name(self) -> str:
@@ -168,3 +183,9 @@ class ViewFileTool(ClientTool):
                 required=True,
             )
         }
+    
+    def run(
+        self, messages: List[Union[UserMessage, ToolResponseMessage]]
+    ) -> List[Union[UserMessage, ToolResponseMessage]]:
+        print("View file called")
+        return messages
