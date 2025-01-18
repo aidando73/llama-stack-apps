@@ -1,5 +1,5 @@
 import os
-from typing import Literal, Optional, Tuple, Union
+from typing import Literal, Optional, Tuple, Union, Dict
 from llama_stack_client import LlamaStackClient
 from llama_models.llama3.api.chat_format import ChatFormat
 from llama_models.llama3.api.tokenizer import Tokenizer
@@ -17,6 +17,8 @@ from llama_stack_client.lib.agents.agent import Agent
 from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.types.agent_create_params import AgentConfig
 from llama_stack_client.types.tool_def_param import ToolDefParam, Parameter
+from llama_stack_client.lib.agents.client_tool import ClientTool
+
 # Currently only supports 3.3-70B-Instruct at the moment since it depends on the 3.3/3.2 tool prompt format
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
 ITERATIONS = 15
@@ -39,18 +41,20 @@ def run_agent(
     agent_config = AgentConfig(
         model=MODEL_ID,
         instructions=system_prompt,
-        tools=PHASE1_TOOLS,
+        client_tools=PHASE1_TOOLS,
         enable_session_persistence=False,
-        toolgroups=["pick_file", "list_files", "view_file"],
+        tool_prompt_format="python_list",
     )
-    agent = Agent(client, agent_config)
+    agent = Agent(client, agent_config, client_tools=[PickFileTool(), ListFilesTool(), ViewFileTool()])
     session_id = agent.create_session("test-session")
     response = agent.create_turn(
         session_id=session_id,
-        messages=[{"role": "user", "content": "Go ahead and solve the problem statement."}],
+        messages=[
+            {"role": "user", "content": "Find the file that is relevant to the problem statement."}
+        ],
     )
     for log in EventLogger().log(response):
-        print(magenta(log))
+        print(magenta(log), end="")
 
 
 PHASE1_SYSTEM = """
@@ -79,7 +83,7 @@ PHASE1_TOOLS = [
         parameters=[
             Parameter(
                 name="path",
-                param_type="string",
+                parameter_type="string",
                 description="Path to a directory. E.g., `src/` or `src/example` If referencing a file, will return the name of the file.",
                 required=True,
             )
@@ -91,7 +95,7 @@ PHASE1_TOOLS = [
         parameters=[
             Parameter(
                 name="path",
-                param_type="string",
+                parameter_type="string",
                 description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
                 required=True,
             )
@@ -103,10 +107,64 @@ PHASE1_TOOLS = [
         parameters=[
             Parameter(
                 name="path",
-                param_type="string",
+                parameter_type="string",
                 description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
                 required=True,
             )
         ],
     ),
 ]
+
+
+class PickFileTool(ClientTool):
+    def get_name(self) -> str:
+        return "pick_file"
+
+    def get_description(self) -> str:
+        return "Pick the file that is relevant to the problem statement."
+
+    def get_params_definition(self) -> Dict[str, Parameter]:
+        return {
+            "path": Parameter(
+                name="path",
+                parameter_type="string",
+                description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
+                required=True,
+            )
+        }
+
+
+class ListFilesTool(ClientTool):
+    def get_name(self) -> str:
+        return "list_files"
+
+    def get_description(self) -> str:
+        return "List all files in a directory."
+
+    def get_params_definition(self) -> Dict[str, Parameter]:
+        return {
+            "path": Parameter(
+                name="path",
+                parameter_type="string",
+                description="Path to a directory. E.g., `src/` or `src/example` If referencing a file, will return the name of the file.",
+                required=True,
+            )
+        }
+
+
+class ViewFileTool(ClientTool):
+    def get_name(self) -> str:
+        return "view_file"
+
+    def get_description(self) -> str:
+        return "View a file"
+
+    def get_params_definition(self) -> Dict[str, Parameter]:
+        return {
+            "path": Parameter(
+                name="path",
+                parameter_type="string",
+                description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
+                required=True,
+            )
+        }
