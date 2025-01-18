@@ -49,8 +49,6 @@ def run_agent(
         session_id=session_id,
         messages=[{"role": "user", "content": "Go ahead and solve the problem statement."}],
     )
-    # for res in response:
-    #     print(res)
     for log in EventLogger().log(response):
         print(magenta(log))
 
