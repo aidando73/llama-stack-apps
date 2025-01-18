@@ -19,6 +19,7 @@ from llama_stack_client.types.agent_create_params import AgentConfig
 from llama_stack_client.types.tool_def_param import ToolDefParam, Parameter
 from llama_stack_client.lib.agents.client_tool import ClientTool
 from llama_stack.apis.inference import ToolResponseMessage, UserMessage
+import uuid
 
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
 ITERATIONS = 15
