@@ -48,14 +48,16 @@ def run_agent(
     )
     agent = Agent(client, agent_config, client_tools=[PickFileTool(), ListFilesTool(), ViewFileTool()])
     session_id = agent.create_session("test-session")
-    response = agent.create_turn(
-        session_id=session_id,
-        messages=[
-            {"role": "user", "content": "Find the file that is relevant to the problem statement."}
-        ],
-    )
-    for log in EventLogger().log(response):
-        print(magenta(log), end="")
+    tool_responses = []
+    for i in range(PHASE1_ITERATIONS):
+        response = agent.create_turn(
+            session_id=session_id,
+            messages=[
+                {"role": "user", "content": f"Turn {i}"}
+            ],
+        )
+        for log in EventLogger().log(response):
+            print(magenta(log), end="")
 
 
 PHASE1_SYSTEM = """
@@ -138,7 +140,7 @@ class PickFileTool(ClientTool):
         self, messages: List[Union[UserMessage, ToolResponseMessage]]
     ) -> List[Union[UserMessage, ToolResponseMessage]]:
         print("Pick file called")
-        return messages + [ToolResponseMessage(
+        return [ToolResponseMessage(
             call_id=str(uuid.uuid4()),
             tool_name=self.get_name(),
             content="File picked",
@@ -171,7 +173,7 @@ class ListFilesTool(ClientTool):
         self, messages: List[Union[UserMessage, ToolResponseMessage]]
     ) -> List[Union[UserMessage, ToolResponseMessage]]:
         print("List files called")
-        return messages + [ToolResponseMessage(
+        return [ToolResponseMessage(
             call_id=str(uuid.uuid4()),
             tool_name=self.get_name(),
             content="FILE_CONTENT",
@@ -199,7 +201,7 @@ class ViewFileTool(ClientTool):
         self, messages: List[Union[UserMessage, ToolResponseMessage]]
     ) -> List[Union[UserMessage, ToolResponseMessage]]:
         print("View file called")
-        return messages + [ToolResponseMessage(
+        return [ToolResponseMessage(
             call_id=str(uuid.uuid4()),
             role="tool",
             tool_name=self.get_name(),
