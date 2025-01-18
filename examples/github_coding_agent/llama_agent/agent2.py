@@ -1,5 +1,5 @@
 import os
-from typing import Literal, Optional, Tuple, Union, Dict
+from typing import Literal, Optional, Tuple, Union, Dict, List
 from llama_stack_client import LlamaStackClient
 from llama_models.llama3.api.chat_format import ChatFormat
 from llama_models.llama3.api.tokenizer import Tokenizer
@@ -18,6 +18,7 @@ from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.types.agent_create_params import AgentConfig
 from llama_stack_client.types.tool_def_param import ToolDefParam, Parameter
 from llama_stack_client.lib.agents.client_tool import ClientTool
+from llama_stack.apis.inference import ToolResponseMessage, UserMessage
 
 # Currently only supports 3.3-70B-Instruct at the moment since it depends on the 3.3/3.2 tool prompt format
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
