@@ -9,5 +9,8 @@ docker run -it \
   --port $LLAMA_STACK_PORT \
   --env FIREWORKS_API_KEY=$FIREWORKS_API_KEY
 
-
+version=v40.6-confirm && \
+eval_dir=$(realpath evals/$version) && \
+mkdir -p $eval_dir && \
+python eval10.py --eval_dir $eval_dir --num_workers 8
 ```
