@@ -52,8 +52,16 @@ def run_agent(
             {"role": "user", "content": "Find the file that is relevant to the problem statement."}
         ],
     )
-    for log in EventLogger().log(response):
-        print(magenta(log), end="")
+    for chunk in response:
+        if hasattr(chunk, "event"):
+            if hasattr(chunk.event, "payload") and hasattr(chunk.event.payload, "delta"):
+                print(magenta(chunk.event.payload.delta.text), end="")
+            else:
+                print(blue(chunk.event))
+        else:
+            print(blue(chunk))
+    # for log in EventLogger().log(response):
+    #     print(magenta(log), end="")
 
 
 
