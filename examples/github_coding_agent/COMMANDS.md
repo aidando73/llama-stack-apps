@@ -22,6 +22,7 @@ mkdir -p evals/$version && \
 eval_dir=$(realpath evals/$version) && \
 python eval10.py --eval_dir $eval_dir
 
+# On macbook
 python eval10.py
 
 (rm worker_0.log || true) && python eval10.py

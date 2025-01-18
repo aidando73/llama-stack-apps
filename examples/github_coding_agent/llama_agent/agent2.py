@@ -18,6 +18,7 @@ from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.types import Attachment
 from llama_stack_client.types.agent_create_params import AgentConfig
 
+
 # Currently only supports 3.3-70B-Instruct at the moment since it depends on the 3.3/3.2 tool prompt format
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
 ITERATIONS = 15
@@ -25,13 +26,13 @@ ITERATIONS = 15
 def run_agent(
     client: LlamaStackClient, repo: str, problem_statement: str, instance_id: str, eval_dir: str, sandbox_dir: str
 ) -> Tuple[Literal["changes_made", "no_changes_made"], str, Optional[str]]:
+    system_prompt = PHASE1_SYSTEM.format(problem_statement=issue_body)
     agent_config = AgentConfig(
         model=MODEL_ID,
-        instructions="You are a helpful assistant",
-        tools=[],
+        instructions=system_prompt,
+        tools=PHASE1_TOOLS,
         enable_session_persistence=False
     )
-
     agent = Agent(client, agent_config)
     session_id = agent.create_session("test-session")
     response = agent.create_turn(
@@ -40,3 +41,59 @@ def run_agent(
     )
     for log in EventLogger().log(response):
         log.print()
+
+
+PHASE1_SYSTEM = """
+You are an expert software engineer. You are given the following problem:
+<problem_statement>
+{{ problem_statement }}
+</problem_statement>
+
+The repo is called {{ repo }}.
+
+Here is the file tree of the repository:
+<file_tree>
+{{ file_tree }}
+</file_tree>
+
+Your task is to locate the relevant file to the problem statement by making one or more function/tool calls.
+
+If you have located the relevant file, call the `pick_file` function with the path to the file. \
+E.g., `pick_file(path="src/file.py")`
+"""
+
+PHASE1_TOOLS = [
+    ToolDefinition(
+        tool_name="list_files",
+        description="List all files in a directory.",
+        parameters={
+            "path": ToolParamDefinition(
+                param_type="string",
+                description="Path to a directory. E.g., `src/` or `src/example` If referencing a file, will return the name of the file.",
+                required=True,
+            )
+        },
+    ),
+    ToolDefinition(
+        tool_name="view_file",
+        description="View a file",
+        parameters={
+            "path": ToolParamDefinition(
+                param_type="string",
+                description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
+                required=True,
+            )
+        },
+    ),
+    ToolDefinition(
+        tool_name="pick_file",
+        description=("Pick the file that is relevant to the problem statement."),
+        parameters={
+            "path": ToolParamDefinition(
+                param_type="string",
+                description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
+                required=True,
+            )
+        },
+    ),
+]
