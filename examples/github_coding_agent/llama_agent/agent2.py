@@ -57,8 +57,6 @@ def run_agent(
         print(magenta(log), end="")
 
 
-
-
 PHASE1_SYSTEM = """
 You are an expert software engineer. You are given the following problem:
 <problem_statement>
