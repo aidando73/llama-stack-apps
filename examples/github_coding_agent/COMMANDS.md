@@ -9,8 +9,16 @@ docker run -it \
   --port $LLAMA_STACK_PORT \
   --env FIREWORKS_API_KEY=$FIREWORKS_API_KEY
 
-version=v40.6-confirm && \
+source ~/miniconda3/bin/activate
+conda create --prefix ./examples/github_coding_agent/env/ python=3.10
+conda activate ./examples/github_coding_agent/env/
+pip install -r ./examples/github_coding_agent/requirements.txt
+
+# Dev dependencies
+pip install datasets
+
+version=v1 && \
+mkdir -p evals/$version && \
 eval_dir=$(realpath evals/$version) && \
-mkdir -p $eval_dir && \
 python eval10.py --eval_dir $eval_dir --num_workers 8
 ```
