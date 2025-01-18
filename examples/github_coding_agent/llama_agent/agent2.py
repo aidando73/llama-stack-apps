@@ -22,18 +22,26 @@ from llama_stack_client.types.tool_def_param import ToolDefParam, Parameter
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
 ITERATIONS = 15
 
+
 def run_agent(
-    client: LlamaStackClient, repo: str, problem_statement: str, instance_id: str, eval_dir: str, sandbox_dir: str
+    client: LlamaStackClient,
+    repo: str,
+    problem_statement: str,
+    instance_id: str,
+    eval_dir: str,
+    sandbox_dir: str,
 ) -> Tuple[Literal["changes_made", "no_changes_made"], str, Optional[str]]:
     files_in_repo = "\n".join(
         list_files_in_repo(os.path.join(sandbox_dir, repo), depth=1)
     )
-    system_prompt = PHASE1_SYSTEM.format(problem_statement=problem_statement, file_tree=files_in_repo)
+    system_prompt = PHASE1_SYSTEM.format(
+        problem_statement=problem_statement, file_tree=files_in_repo, repo=repo
+    )
     agent_config = AgentConfig(
         model=MODEL_ID,
         instructions=system_prompt,
         tools=PHASE1_TOOLS,
-        enable_session_persistence=False
+        enable_session_persistence=False,
     )
     agent = Agent(client, agent_config)
     session_id = agent.create_session("test-session")
@@ -42,20 +50,21 @@ def run_agent(
         messages=[{"role": "user", "content": "Hello World"}],
     )
     for log in EventLogger().log(response):
+        print(log)
         log.print()
 
 
 PHASE1_SYSTEM = """
 You are an expert software engineer. You are given the following problem:
 <problem_statement>
-{{ problem_statement }}
+{problem_statement}
 </problem_statement>
 
-The repo is called {{ repo }}.
+The repo is called {repo}.
 
 Here is the file tree of the repository:
 <file_tree>
-{{ file_tree }}
+{file_tree}
 </file_tree>
 
 Your task is to locate the relevant file to the problem statement by making one or more function/tool calls.
@@ -99,6 +108,6 @@ PHASE1_TOOLS = [
                 description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
                 required=True,
             )
-        ]
+        ],
     ),
 ]

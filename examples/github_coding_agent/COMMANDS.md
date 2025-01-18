@@ -25,7 +25,5 @@ python eval10.py --eval_dir $eval_dir
 pip install --no-cache --index-url https://pypi.org/simple/ --extra-index-url https://test.pypi.org/simple/ llama-stack==0.1.0rc7
 
 # On macbook
-python eval10.py
-
 (rm worker_0.log || true) && python eval10.py
 ```
