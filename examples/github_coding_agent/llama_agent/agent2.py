@@ -17,7 +17,8 @@ from llama_stack_client.lib.agents.agent import Agent
 from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.types import Attachment
 from llama_stack_client.types.agent_create_params import AgentConfig
-from llama_stack_client.types.tool_def import ToolDef, Parameter
+from llama_stack_client.types.shared_params.function_call_tool_definition import FunctionCallToolDefinition
+from llama_stack_client.types.shared_params.tool_param_definition import ToolParamDefinition
 
 # Currently only supports 3.3-70B-Instruct at the moment since it depends on the 3.3/3.2 tool prompt format
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
@@ -66,37 +67,37 @@ E.g., `pick_file(path="src/file.py")`
 """
 
 PHASE1_TOOLS = [
-    ToolDef(
-        name="list_files",
+    FunctionCallToolDefinition(
+        function_name="list_files",
         description="List all files in a directory.",
         parameters=[
-            Parameter(
+            ToolParamDefinition(
                 name="path",
-                parameter_type="string",
+                param_type="string",
                 description="Path to a directory. E.g., `src/` or `src/example` If referencing a file, will return the name of the file.",
                 required=True,
             )
         ],
     ),
-    ToolDef(
-        name="view_file",
+    FunctionCallToolDefinition(
+        function_name="view_file",
         description="View a file",
         parameters=[
-            Parameter(
+            ToolParamDefinition(
                 name="path",
-                parameter_type="string",
+                param_type="string",
                 description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
                 required=True,
             )
         ],
     ),
-    ToolDef(
-        name="pick_file",
+    FunctionCallToolDefinition(
+        function_name="pick_file",
         description=("Pick the file that is relevant to the problem statement."),
         parameters=[
-            Parameter(
+            ToolParamDefinition(
                 name="path",
-                parameter_type="string",
+                param_type="string",
                 description="Path to file, e.g. `src/file.py` or `src/example/file.py`.",
                 required=True,
             )
