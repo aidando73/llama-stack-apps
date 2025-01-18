@@ -10,9 +10,9 @@ docker run -it \
   --env FIREWORKS_API_KEY=$FIREWORKS_API_KEY
 
 source ~/miniconda3/bin/activate
-conda create --prefix ./examples/github_coding_agent/env/ python=3.10
-conda activate ./examples/github_coding_agent/env/
-pip install -r ./examples/github_coding_agent/requirements.txt
+conda create --prefix ./env python=3.10 -y
+conda activate ./env
+pip install -r ./requirements.txt
 
 # Dev dependencies
 pip install datasets
@@ -23,4 +23,6 @@ eval_dir=$(realpath evals/$version) && \
 python eval10.py --eval_dir $eval_dir
 
 python eval10.py
+
+(rm worker_0.log || true) && python eval10.py
 ```

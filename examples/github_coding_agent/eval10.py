@@ -155,10 +155,10 @@ def worker_process(args):
                 client=client,
                 repo=repo_name,
                 problem_statement=row["problem_statement"],
-                relevant_file=relevant_file,
+                # relevant_file=relevant_file,
                 eval_dir=eval_dir,
-                instance_id=row["instance_id"],
                 sandbox_dir=sandbox_dir,
+                instance_id=row["instance_id"],
             )
         except Exception as e:
             print(f"Agent exited with error: {e}")
