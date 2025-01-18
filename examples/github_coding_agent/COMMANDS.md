@@ -20,5 +20,7 @@ pip install datasets
 version=v1 && \
 mkdir -p evals/$version && \
 eval_dir=$(realpath evals/$version) && \
-python eval10.py --eval_dir $eval_dir --num_workers 8
+python eval10.py --eval_dir $eval_dir
+
+python eval10.py
 ```
