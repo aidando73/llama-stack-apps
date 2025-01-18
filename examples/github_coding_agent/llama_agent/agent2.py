@@ -22,6 +22,7 @@ from llama_stack.apis.inference import ToolResponseMessage, UserMessage
 
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
 ITERATIONS = 15
+PHASE1_ITERATIONS = 10
 
 def run_agent(
     client: LlamaStackClient,
@@ -46,25 +47,14 @@ def run_agent(
     )
     agent = Agent(client, agent_config, client_tools=[PickFileTool(), ListFilesTool(), ViewFileTool()])
     session_id = agent.create_session("test-session")
-    
     response = agent.create_turn(
         session_id=session_id,
         messages=[
             {"role": "user", "content": "Find the file that is relevant to the problem statement."}
         ],
     )
-    for chunk in response:
-        print(blue(chunk))
-    response = agent.create_turn(
-        session_id=session_id,
-        messages=[
-            {"role": "user", "content": "Find the file that is relevant to the problem statement."}
-        ],
-    )
-    for chunk in response:
-        print(blue(chunk))
-    # for log in EventLogger().log(response):
-    #     print(magenta(log), end="")
+    for log in EventLogger().log(response):
+        print(magenta(log), end="")
 
 
 
