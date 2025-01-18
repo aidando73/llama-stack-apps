@@ -47,11 +47,12 @@ def run_agent(
     session_id = agent.create_session("test-session")
     response = agent.create_turn(
         session_id=session_id,
-        messages=[{"role": "user", "content": "Hello World"}],
+        messages=[{"role": "user", "content": "Go ahead and solve the problem statement."}],
     )
+    # for res in response:
+    #     print(res)
     for log in EventLogger().log(response):
-        print(log)
-        log.print()
+        print(magenta(log))
 
 
 PHASE1_SYSTEM = """
