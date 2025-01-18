@@ -137,7 +137,12 @@ class PickFileTool(ClientTool):
         self, messages: List[Union[UserMessage, ToolResponseMessage]]
     ) -> List[Union[UserMessage, ToolResponseMessage]]:
         print("Pick file called")
-        return messages
+        return messages + [ToolResponseMessage(
+            call_id=str(uuid.uuid4()),
+            tool_name=self.get_name(),
+            content="File picked",
+            role="tool",
+        )]
 
 
 
@@ -165,7 +170,12 @@ class ListFilesTool(ClientTool):
         self, messages: List[Union[UserMessage, ToolResponseMessage]]
     ) -> List[Union[UserMessage, ToolResponseMessage]]:
         print("List files called")
-        return messages
+        return messages + [ToolResponseMessage(
+            call_id=str(uuid.uuid4()),
+            tool_name=self.get_name(),
+            content="FILE_CONTENT",
+            role="tool",
+        )]
 
 class ViewFileTool(ClientTool):
     def get_name(self) -> str:
@@ -188,4 +198,10 @@ class ViewFileTool(ClientTool):
         self, messages: List[Union[UserMessage, ToolResponseMessage]]
     ) -> List[Union[UserMessage, ToolResponseMessage]]:
         print("View file called")
-        return messages
+        return messages + [ToolResponseMessage(
+            call_id=str(uuid.uuid4()),
+            role="tool",
+            tool_name=self.get_name(),
+            content="FILE_CONTENT",
+        )]
+
