@@ -23,7 +23,7 @@ import uuid
 
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
 ITERATIONS = 15
-PHASE1_ITERATIONS = 10
+PHASE1_ITERATIONS = 5
 
 def run_agent(
     client: LlamaStackClient,
@@ -50,14 +50,28 @@ def run_agent(
     session_id = agent.create_session("test-session")
     tool_responses = []
     for i in range(PHASE1_ITERATIONS):
+        # Add any tool responses from previous iterations
+        messages = tool_responses
+        messages.append({"role": "user", "content": f"Turn {i}"})
+        tool_responses = []
         response = agent.create_turn(
             session_id=session_id,
-            messages=[
-                {"role": "user", "content": f"Turn {i}"}
-            ],
+            messages=messages,
         )
-        for log in EventLogger().log(response):
-            print(magenta(log), end="")
+
+        for res in response:
+            if isinstance(res, ToolResponseMessage):
+                tool_responses.append(res)
+            else:
+                print(magenta(res))
+
+        #     if hasattr(message, "event"):
+        #         print(magenta(message.event))
+        #     else:
+        #         print(blue(message))
+        # print(magenta(str(tool_responses)))
+        # for log in EventLogger().log(response):
+        #     print(magenta(log), end="")
 
 
 PHASE1_SYSTEM = """
