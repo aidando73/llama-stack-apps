@@ -17,7 +17,6 @@ from llama_stack_client.lib.agents.agent import Agent
 from llama_stack_client.lib.agents.event_logger import EventLogger
 from llama_stack_client.types.agent_create_params import AgentConfig
 from llama_stack_client.types.tool_def_param import ToolDefParam, Parameter
-
 # Currently only supports 3.3-70B-Instruct at the moment since it depends on the 3.3/3.2 tool prompt format
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
 ITERATIONS = 15
@@ -42,6 +41,7 @@ def run_agent(
         instructions=system_prompt,
         tools=PHASE1_TOOLS,
         enable_session_persistence=False,
+        toolgroups=["pick_file", "list_files", "view_file"],
     )
     agent = Agent(client, agent_config)
     session_id = agent.create_session("test-session")
