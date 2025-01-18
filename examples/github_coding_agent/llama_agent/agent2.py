@@ -20,10 +20,8 @@ from llama_stack_client.types.tool_def_param import ToolDefParam, Parameter
 from llama_stack_client.lib.agents.client_tool import ClientTool
 from llama_stack.apis.inference import ToolResponseMessage, UserMessage
 
-# Currently only supports 3.3-70B-Instruct at the moment since it depends on the 3.3/3.2 tool prompt format
 MODEL_ID = "meta-llama/Llama-3.3-70B-Instruct"
 ITERATIONS = 15
-
 
 def run_agent(
     client: LlamaStackClient,
