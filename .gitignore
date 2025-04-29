@@ -181,3 +181,5 @@ Package.resolved
 **/RAG_service.json
 examples/DocQA/example_data/chroma.sqlite3
 examples/DocQA/example_data/**/*.bin
+
+.envrc

@@ -24,6 +24,7 @@ class ExampleLlamaStackRemoteInference(remoteURL: String) {
     private var client: LlamaStackClientClient? = null
 
     init {
+        AppLogging.getInstance().log("Init ExampleLlamaStackRemoteInference")
         try {
             client = LlamaStackClientOkHttpClient
                 .builder()
@@ -153,7 +154,7 @@ class ExampleLlamaStackRemoteInference(remoteURL: String) {
             return "Exception on remote inference " + e.message
         }
         return response
-    }
+    }Wh
 
 
     private fun constructLSMessagesFromConversationHistoryAndSystemPrompt(

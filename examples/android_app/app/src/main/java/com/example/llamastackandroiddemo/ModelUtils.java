@@ -42,7 +42,7 @@ public class ModelUtils {
   public static List<String> getSupportedRemoteModels() {
     return Arrays.asList(
             "meta-llama/Llama-3.2-1B-Instruct",
-            "meta-llama/Llama-3.2-3B-Instruct"
+            "Llama3.2-3B-Instruct"
             );
   }
 
